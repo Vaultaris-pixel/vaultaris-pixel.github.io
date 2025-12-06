@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaultaris Admin Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: #111;
+            padding: 20px;
+            text-align: center;
+            font-size: 26px;
+            color: gold;
+            border-bottom: 1px solid #333;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h2 {
+            color: gold;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background: #111;
+        }
+
+        table th, table td {
+            border: 1px solid #333;
+            padding: 12px;
+            text-align: center;
+        }
+
+        button {
+            padding: 8px 15px;
+            background: gold;
+            border: none;
+            color: black;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .approve {
+            background: #00ff00;
+            color: black;
+        }
+
+        .reject {
+            background: #ff0000;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<header>Vaultaris Admin Dashboard</header>
+
+<div class="container">
+
+    <h2>Pending Deposits</h2>
+
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Amount</th>
+            <th>Payment Proof</th>
+            <th>Action</th>
+        </tr>
+
+        <tr>
+            <td>John Doe</td>
+            <td>$200</td>
+            <td><a href="#" style="color: gold;">View Proof</a></td>
+            <td>
+                <button class="approve">Approve</button>
+                <button class="reject">Reject</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Sarah</td>
+            <td>$500</td>
+            <td><a href="#" style="color: gold;">View Proof</a></td>
+            <td>
+                <button class="approve">Approve</button>
+                <button class="reject">Reject</button>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+</body>
+</html>
