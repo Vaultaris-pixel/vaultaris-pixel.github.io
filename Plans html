@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vaultaris – Investment Plans</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #0A0F24;
+      color: white;
+    }
+    header {
+      background: #0F152E;
+      padding: 20px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      color: #4FA3FF;
+    }
+    .container {
+      padding: 50px 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 40px;
+      margin-bottom: 20px;
+      color: #4FA3FF;
+    }
+    p {
+      color: #CFCFCF;
+      max-width: 700px;
+      margin: auto;
+      font-size: 17px;
+    }
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+    .plan-box {
+      background: #141B33;
+      border: 1px solid #22305A;
+      padding: 30px;
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+    .plan-box:hover {
+      transform: translateY(-5px);
+      border-color: #4FA3FF;
+    }
+    .plan-box h2 {
+      color: #4FA3FF;
+      margin-bottom: 15px;
+    }
+    .price {
+      font-size: 34px;
+      font-weight: 700;
+      margin: 15px 0;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      color: #B0B0B0;
+      line-height: 1.8;
+    }
+    .btn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: #4FA3FF;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    footer {
+      margin-top: 50px;
+      padding: 20px;
+      text-align: center;
+      background: #0F152E;
+      color: #8F9BB7;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>Vaultaris Investment Plans</header>
+
+<div class="container">
+
+  <h1>Select Your Investment Plan</h1>
+  <p>Choose a plan that matches your financial goals. Vaultaris provides transparent, secure, and high-yield crypto investment packages designed for all levels of investors.</p>
+  
+  <div class="plans">
+
+    <!-- Starter Plan -->
+    <div class="plan-box">
+      <h2>Starter Plan</h2>
+      <div class="price">$50 – $499</div>
+      <ul>
+        <li>Daily ROI: 5%</li>
+        <li>Duration: 5 Days</li>
+        <li>24/7 Support</li>
+        <li>Low-risk beginner package</li>
+      </ul>
+      <a href="#" class="btn">Invest Now</a>
+    </div>
+
+    <!-- Standard Plan -->
+    <div class="plan-box">
+      <h2>Standard Plan</h2>
+      <div class="price">$500 – $2,999</div>
+      <ul>
+        <li>Daily ROI: 10%</li>
+        <li>Duration: 7 Days</li>
+        <li>Priority withdrawals</li>
+        <li>Recommended for steady profit</li>
+      </ul>
+      <a href="#" class="btn">Invest Now</a>
+    </div>
+
+    <!-- Premium Plan -->
+    <div class="plan-box">
+      <h2>Premium Plan</h2>
+      <div class="price">$3,000 – $9,999</div>
+      <ul>
+        <li>Daily ROI: 15%</li>
+        <li>Duration: 10 Days</li>
+        <li>VIP Support</li>
+        <li>High-yield strategy</li>
+      </ul>
+      <a href="#" class="btn">Invest Now</a>
+    </div>
+
+    <!-- Elite Plan -->
+    <div class="plan-box">
+      <h2>Elite Plan</h2>
+      <div class="price">$10,000+</div>
+      <ul>
+        <li>Daily ROI: 20%</li>
+        <li>Duration: 14 Days</li>
+        <li>Personal account manager</li>
+        <li>Advanced investment automation</li>
+      </ul>
+      <a href="#" class="btn">Invest Now</a>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  © 2025 Vaultaris Crypto Investments — All Rights Reserved.
+</footer>
+
+</body>
+</html>
