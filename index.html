@@ -248,21 +248,100 @@
         </div>
     </div>
 
-    <h2 class="section-title" id="faq">Frequently Asked Questions</h2>
-    <div class="faq">
-        <div class="faq-item">
-            <h4>How do I invest?</h4>
-            <p>Create an account, log in, choose a plan, and invest.</p>
-        </div>
-        <div class="faq-item">
-            <h4>Is Vaultaris secure?</h4>
-            <p>Yes, we use encrypted systems to protect your information.</p>
-        </div>
-        <div class="faq-item">
-            <h4>When can I withdraw?</h4>
-            <p>Withdraw anytime depending on your investment plan.</p>
+    <h2 class="section-title">Investment Calculator</h2>
+
+    <!-- CALCULATOR SECTION -->
+    <div class="calculator-container" style="
+        max-width: 500px;
+        margin: 40px auto;
+        background: #111;
+        padding: 25px;
+        border-radius: 10px;
+        border: 1px solid #333;
+    ">
+        <label>Amount to Invest ($)</label>
+        <input id="amount" type="number" placeholder="Enter amount" style="
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+        ">
+
+        <label>ROI Percentage (%)</label>
+        <input id="roi" type="number" placeholder="E.g. 10, 20, 35" style="
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+        ">
+
+        <label>Duration (Days)</label>
+        <input id="days" type="number" placeholder="Enter number of days" style="
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+        ">
+
+        <button onclick="calculateProfit()" style="
+            width: 100%;
+            padding: 12px;
+            background: gold;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        ">Calculate</button>
+
+        <div id="result" style="
+            margin-top: 20px;
+            padding: 20px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            display: none;
+        ">
+            <h3 style="color: gold; margin: 0 0 10px;">Result</h3>
+            <p id="profit" style="margin: 5px 0; color: #ccc;"></p>
+            <p id="total" style="margin: 5px 0; color: #ccc;"></p>
         </div>
     </div>
+
+    <script>
+    function calculateProfit() {
+        let amount = parseFloat(document.getElementById("amount").value);
+        let roi = parseFloat(document.getElementById("roi").value);
+        let days = parseFloat(document.getElementById("days").value);
+
+        if (!amount || !roi || !days) {
+            alert("Please fill all fields");
+            return;
+        }
+
+        let dailyReturn = (amount * (roi / 100));
+        let totalProfit = dailyReturn * days;
+        let totalReturn = amount + totalProfit;
+
+        document.getElementById("profit").innerHTML =
+            "Total Profit: <b>$" + totalProfit.toFixed(2) + "</b>";
+
+        document.getElementById("total").innerHTML =
+            "Total Return: <b>$" + totalReturn.toFixed(2) + "</b>";
+
+        document.getElementById("result").style.display = "block";
+    }
+    </script>
 
     <footer>
         <p>Follow us:  
