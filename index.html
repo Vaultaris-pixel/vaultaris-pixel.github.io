@@ -202,3 +202,610 @@ index.html<!DOCTYPE html>
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Vaultaris - Auth & Dashboard</title>
+<style>
+    :root{
+        --bg:#0d1117;
+        --panel:#161b22;
+        --card:#1f2937;
+        --accent:#facc15;
+        --muted:#9aa4b2;
+        --glass: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    body{
+        margin:0;
+        font-family:Inter, Arial, sans-serif;
+        background:linear-gradient(180deg,var(--bg),#071018 120%);
+        color:#fff;
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+        min-height:100vh;
+    }
+
+    /* App container */
+    .app {
+        max-width:1100px;
+        margin:28px auto;
+        padding:18px;
+    }
+
+    header.app-header{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        background:var(--panel);
+        padding:14px 18px;
+        border-radius:10px;
+        box-shadow:0 6px 18px rgba(2,6,23,0.6);
+        border:1px solid rgba(255,255,255,0.03);
+    }
+    .brand{
+        display:flex;
+        gap:12px;
+        align-items:center;
+    }
+    .logo {
+        width:42px;height:42px;border-radius:8px;
+        background:linear-gradient(135deg,var(--accent),#eab308);
+        display:flex;align-items:center;justify-content:center;color:#000;font-weight:800;
+        box-shadow:0 4px 10px rgba(234,179,8,0.2);
+    }
+    .brand h1{font-size:18px;margin:0;color:var(--accent);letter-spacing:0.6px}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    nav .nav-actions{display:flex;gap:10px;align-items:center}
+    .nav-actions button{
+        background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--accent);
+        padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700
+    }
+    .nav-user{display:flex;gap:10px;align-items:center}
+    .chip{background:var(--glass);padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.02)}
+    .small-muted{font-size:13px;color:var(--muted)}
+
+    /* Layout */
+    .content {
+        margin-top:20px;
+        display:grid;
+        grid-template-columns: 1fr;
+        gap:20px;
+    }
+
+    /* Auth card */
+    .card {
+        background: linear-gradient(180deg,var(--panel), rgba(255,255,255,0.01));
+        padding:18px;
+        border-radius:12px;
+        border:1px solid rgba(255,255,255,0.03);
+        box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    }
+
+    .auth-grid{
+        display:grid;
+        grid-template-columns: 1fr;
+        gap:12px;
+        max-width:420px;
+        margin: 0 auto;
+    }
+
+    h2{margin:0 0 10px 0;color:#00c3ff}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input[type="text"],input[type="email"],input[type="password"]{
+        width:100%;
+        padding:12px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);
+        background:#0f1418;color:#fff;
+        outline:none;font-size:14px;
+    }
+    .row{display:flex;gap:10px}
+    .btn{
+        display:inline-block;padding:12px;border-radius:8px;border:none;background:var(--accent);
+        color:#000;font-weight:800;cursor:pointer;width:100%;
+    }
+    .ghost{
+        background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent);
+    }
+    .muted{color:var(--muted);font-size:13px;margin-top:8px;text-align:center}
+
+    /* Plans container (reused from earlier) */
+    .plans-container {
+        max-width:1100px;
+        margin:0 auto;
+        padding:10px;
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap:20px;
+    }
+    .plan-box {
+        background: var(--card);
+        padding:20px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);
+        transition:transform .25s,box-shadow .25s;
+    }
+    .plan-box:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(2,6,23,0.6)}
+    .plan-title{color:var(--accent);font-weight:800;margin-bottom:8px;text-transform:uppercase}
+    .plan-price{font-size:24px;font-weight:800;margin-bottom:10px}
+    ul{list-style:none;padding:0;margin:0 0 12px 0}
+    ul li{padding:8px 0;border-top:1px dashed rgba(255,255,255,0.03);font-size:14px;color:var(--muted)}
+
+    /* Dashboard */
+    .welcome{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .wallet{background:linear-gradient(90deg,#08202a,#0b1220);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* responsive */
+    @media (min-width:900px){
+        .content{grid-template-columns: 360px 1fr}
+        .auth-grid{margin:0}
+    }
+</style>
+</head>
+<body>
+<div class="app">
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="brand">
+            <div class="logo">V</div>
+            <div>
+                <h1>Vaultaris</h1>
+                <p>Crypto Investment</p>
+            </div>
+        </div>
+
+        <nav class="nav-actions">
+            <div class="nav-user small-muted" id="navArea">
+                <!-- will be populated -->
+                <div class="chip" id="notLogged">Not signed in</div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main content (SPA) -->
+    <main class="content">
+
+        <!-- Left column: Auth card or profile -->
+        <section id="sideColumn" class="card">
+
+            <!-- Login / Register containers (toggle) -->
+            <div id="authArea">
+
+                <!-- LOGIN -->
+                <div id="loginView">
+                    <h2>Welcome back</h2>
+                    <p class="small-muted">Sign in to access your Vaultaris dashboard</p>
+                    <div class="auth-grid" style="margin-top:12px">
+                        <div>
+                            <label for="loginEmail">Email</label>
+                            <input id="loginEmail" type="email" placeholder="you@example.com" />
+                        </div>
+                        <div>
+                            <label for="loginPassword">Password</label>
+                            <input id="loginPassword" type="password" placeholder="••••••••" />
+                        </div>
+                        <button class="btn" id="loginBtn">Login</button>
+                        <button class="btn ghost" id="toRegister">Create account</button>
+                        <div class="muted">By logging in you agree to our terms.</div>
+                        <div id="loginError" class="muted" style="color:#ff9b9b"></div>
+                    </div>
+                </div>
+
+                <!-- REGISTER -->
+                <div id="registerView" style="display:none">
+                    <h2>Create account</h2>
+                    <p class="small-muted">Quick sign up — we store data locally in this demo.</p>
+                    <div class="auth-grid" style="margin-top:12px">
+                        <div>
+                            <label for="regName">Full name</label>
+                            <input id="regName" type="text" placeholder="Jane Doe" />
+                        </div>
+                        <div>
+                            <label for="regEmail">Email</label>
+                            <input id="regEmail" type="email" placeholder="you@example.com" />
+                        </div>
+                        <div>
+                            <label for="regPass">Password</label>
+                            <input id="regPass" type="password" placeholder="At least 6 characters" />
+                        </div>
+                        <button class="btn" id="registerBtn">Register</button>
+                        <button class="btn ghost" id="toLogin">Back to login</button>
+                        <div id="regError" class="muted" style="color:#ff9b9b"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Profile card (hidden until logged in) -->
+            <div id="profileCard" style="display:none">
+                <h2 id="profileName">Hello, User</h2>
+                <div class="small-muted">Welcome to your Vaultaris account.</div>
+                <div style="height:10px"></div>
+                <div class="wallet">
+                    <div class="small">Account Balance</div>
+                    <div style="font-weight:800;font-size:20px;margin-top:6px" id="userBalance">₦0.00</div>
+                </div>
+                <div style="height:12px"></div>
+                <button class="btn" id="gotoDashboard">Go to Dashboard</button>
+                <button class="btn ghost" id="logoutBtn" style="margin-top:8px">Logout</button>
+            </div>
+        </section>
+
+        <!-- Right column: Plans / Dashboard -->
+        <section id="mainColumn">
+
+            <!-- Plans page (default public page) -->
+            <div id="plansPage" class="card">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <h2 style="margin-bottom:6px">Investment Plans</h2>
+                        <div class="small-muted">Choose a plan that best fits your goals</div>
+                    </div>
+                    <div>
+                        <button class="btn ghost" id="viewDashboardBtn">My Dashboard</button>
+                    </div>
+                </div>
+
+                <div style="height:16px"></div>
+
+                <div class="plans-container" id="plansContainer">
+                    <!-- Bronze -->
+                    <div class="plan-box">
+                        <div class="plan-title">Bronze Plan</div>
+                        <div class="plan-price">$50 – $199</div>
+                        <ul>
+                            <li>Daily ROI: 5%</li>
+                            <li>Duration: 5 Days</li>
+                            <li>24/7 Customer Support</li>
+                            <li>Instant Withdrawal</li>
+                        </ul>
+                        <button class="btn investBtn" data-plan="Bronze">Invest Now</button>
+                    </div>
+
+                    <!-- Silver -->
+                    <div class="plan-box">
+                        <div class="plan-title">Silver Plan</div>
+                        <div class="plan-price">$200 – $499</div>
+                        <ul>
+                            <li>Daily ROI: 7%</li>
+                            <li>Duration: 7 Days</li>
+                            <li>24/7 Customer Support</li>
+                            <li>Instant Withdrawal</li>
+                        </ul>
+                        <button class="btn investBtn" data-plan="Silver">Invest Now</button>
+                    </div>
+
+                    <!-- Gold -->
+                    <div class="plan-box">
+                        <div class="plan-title">Gold Plan</div>
+                        <div class="plan-price">$500 – $999</div>
+                        <ul>
+                            <li>Daily ROI: 10%</li>
+                            <li>Duration: 10 Days</li>
+                            <li>24/7 Customer Support</li>
+                            <li>Instant Withdrawal</li>
+                        </ul>
+                        <button class="btn investBtn" data-plan="Gold">Invest Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard (protected) -->
+            <div id="dashboardPage" class="card" style="display:none">
+                <div class="welcome">
+                    <div>
+                        <h2 id="dashTitle">Dashboard</h2>
+                        <div class="small-muted" id="dashSub">Overview of your account</div>
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:center">
+                        <div class="chip small-muted" id="dashUser">Signed in as —</div>
+                        <button class="btn ghost" id="dashLogout">Logout</button>
+                    </div>
+                </div>
+
+                <div style="height:16px"></div>
+
+                <div style="display:grid;grid-template-columns:1fr 320px;gap:16px">
+                    <div>
+                        <div class="card" style="background:linear-gradient(180deg,#0f1720,#0a1116)">
+                            <h3 style="margin:0 0 8px 0">Active Investments</h3>
+                            <div class="small-muted" id="investList">You have no active investments yet.</div>
+                        </div>
+
+                        <div style="height:12px"></div>
+
+                        <div class="card" style="background:linear-gradient(180deg,#091018,#08121a)">
+                            <h3 style="margin:0 0 8px 0">Actions</h3>
+                            <div style="display:flex;gap:10px">
+                                <button class="btn" id="addFakeProfit">Simulate daily ROI</button>
+                                <button class="btn ghost" id="clearInvestments">Clear investments</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside>
+                        <div class="card">
+                            <div class="small-muted">Account</div>
+                            <div style="font-weight:800;font-size:20px;margin-top:6px" id="dashBalance">₦0.00</div>
+                            <div style="height:12px"></div>
+                            <button class="btn" id="depositBtn">Deposit (demo)</button>
+                            <button class="btn ghost" id="withdrawBtn" style="margin-top:8px">Withdraw (demo)</button>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+/*
+  Simple SPA auth demo:
+  - Users are stored in localStorage.users (array of objects {name,email,password,balance,investments})
+  - Current user email stored in localStorage.currentUser
+  - Passwords are plain-text here for demo only. Use a real backend for production.
+*/
+
+const qs = id => document.getElementById(id);
+
+// helpers
+function readUsers(){
+    try{
+        return JSON.parse(localStorage.getItem('vault_users')||'[]');
+    }catch(e){return []}
+}
+function writeUsers(users){ localStorage.setItem('vault_users', JSON.stringify(users)); }
+function setCurrent(email){ localStorage.setItem('vault_current', email); }
+function getCurrentEmail(){ return localStorage.getItem('vault_current'); }
+function logoutLocal(){ localStorage.removeItem('vault_current'); }
+
+// UI refs
+const loginBtn = qs('loginBtn');
+const registerBtn = qs('registerBtn');
+const toRegister = qs('toRegister');
+const toLogin = qs('toLogin');
+const loginError = qs('loginError');
+const regError = qs('regError');
+const loginView = qs('loginView');
+const registerView = qs('registerView');
+const profileCard = qs('profileCard');
+const authArea = qs('authArea');
+const notLogged = qs('notLogged');
+const navArea = qs('navArea');
+const sideColumn = qs('sideColumn');
+
+const profileName = qs('profileName');
+const userBalanceEl = qs('userBalance');
+const gotoDashboard = qs('gotoDashboard');
+const logoutBtn = qs('logoutBtn');
+const dashLogout = qs('dashLogout');
+
+const plansPage = qs('plansPage');
+const dashboardPage = qs('dashboardPage');
+const dashUser = qs('dashUser');
+const dashBalance = qs('dashBalance');
+const investList = qs('investList');
+
+const viewDashboardBtn = qs('viewDashboardBtn');
+const depositBtn = qs('depositBtn');
+const withdrawBtn = qs('withdrawBtn');
+const addFakeProfit = qs('addFakeProfit');
+const clearInvestments = qs('clearInvestments');
+
+const investBtns = () => Array.from(document.querySelectorAll('.investBtn'));
+
+// initial UI
+function refreshNav(){
+    const email = getCurrentEmail();
+    if(!email){
+        navArea.innerHTML = '<div class="chip" id="notLogged">Not signed in</div>';
+        // show auth area
+        loginView.style.display = 'block';
+        registerView.style.display = 'none';
+        profileCard.style.display = 'none';
+    } else {
+        const user = readUsers().find(u=>u.email===email);
+        navArea.innerHTML = `<div class="chip">${user.name.split(' ')[0]}</div>`;
+        // show profile card
+        profileCard.style.display = 'block';
+        loginView.style.display = 'none';
+        registerView.style.display = 'none';
+        profileName.textContent = `Hello, ${user.name.split(' ')[0]}`;
+        userBalanceEl.textContent = currency(user.balance || 0);
+    }
+    // hide/show pages appropriately
+    updatePages();
+}
+
+function updatePages(){
+    const email = getCurrentEmail();
+    if(email){
+        // if signed in, show dashboard card on left
+        qs('profileCard').style.display = 'block';
+    } else {
+        qs('profileCard').style.display = 'none';
+    }
+}
+
+/* --- Auth actions --- */
+
+toRegister.addEventListener('click', ()=>{ loginView.style.display='none'; registerView.style.display='block'; });
+toLogin && toLogin.addEventListener('click', ()=>{ loginView.style.display='block'; registerView.style.display='none'; });
+
+registerBtn.addEventListener('click', ()=>{
+    const name = qs('regName').value.trim();
+    const email = qs('regEmail').value.trim().toLowerCase();
+    const pass = qs('regPass').value;
+
+    regError.textContent = '';
+    if(!name || !email || !pass){ regError.textContent='Please complete all fields.'; return; }
+    if(pass.length < 6){ regError.textContent='Password must be at least 6 characters.'; return; }
+
+    const users = readUsers();
+    if(users.some(u=>u.email===email)){ regError.textContent='Email already registered.'; return; }
+
+    const newUser = { name, email, password:pass, balance:0, investments:[] };
+    users.push(newUser);
+    writeUsers(users);
+    setCurrent(email);
+    regError.textContent = '';
+    qs('regName').value='';qs('regEmail').value='';qs('regPass').value='';
+    refreshNav();
+    showDashboard();
+});
+
+loginBtn.addEventListener('click', ()=>{
+    const email = qs('loginEmail').value.trim().toLowerCase();
+    const pass = qs('loginPassword').value;
+    loginError.textContent='';
+    if(!email || !pass){ loginError.textContent='Enter email and password.'; return; }
+    const users = readUsers();
+    const user = users.find(u=>u.email===email && u.password===pass);
+    if(!user){ loginError.textContent='Invalid credentials.'; return; }
+    setCurrent(email);
+    qs('loginEmail').value='';qs('loginPassword').value='';
+    refreshNav();
+    showDashboard();
+});
+
+logoutBtn.addEventListener('click', ()=>{ performLogout(); });
+dashLogout.addEventListener('click', ()=>{ performLogout(); });
+
+function performLogout(){
+    logoutLocal();
+    refreshNav();
+    showPlans();
+}
+
+/* --- Dashboard & pages --- */
+
+function showDashboard(){
+    const email = getCurrentEmail();
+    if(!email){ loginView.style.display='block'; registerView.style.display='none'; return; }
+    plansPage.style.display = 'none';
+    dashboardPage.style.display = 'block';
+    // update user info
+    const user = readUsers().find(u=>u.email===email);
+    dashUser.textContent = `Signed in as — ${user.email}`;
+    dashBalance.textContent = currency(user.balance || 0);
+    // investments
+    renderInvestments(user);
+}
+
+function showPlans(){
+    plansPage.style.display = 'block';
+    dashboardPage.style.display = 'none';
+}
+
+viewDashboardBtn.addEventListener('click', ()=>{
+    const email = getCurrentEmail();
+    if(!email){
+        // prompt login: scroll / show login
+        loginView.style.display='block'; registerView.style.display='none';
+        window.scrollTo({top:0, behavior:'smooth'});
+    } else {
+        showDashboard();
+    }
+});
+
+gotoDashboard.addEventListener('click', showDashboard);
+
+function renderInvestments(user){
+    if(!user || !user.investments || user.investments.length===0){
+        investList.innerHTML = '<div class="small-muted">You have no active investments yet.</div>';
+        return;
+    }
+    let html = '<ul style="padding-left:12px">';
+    user.investments.forEach((inv, idx)=>{
+        html += `<li style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03)"><strong>${inv.plan}</strong> — invested ${currency(inv.amount)} • progress: ${inv.progress || 0}%</li>`;
+    });
+    html += '</ul>';
+    investList.innerHTML = html;
+}
+
+/* --- Investing demo --- */
+
+investBtns().forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+        const plan = e.currentTarget.dataset.plan;
+        const email = getCurrentEmail();
+        if(!email){
+            alert('Please login or create an account to invest.');
+            loginView.style.display='block'; registerView.style.display='none';
+            window.scrollTo({top:0, behavior:'smooth'});
+            return;
+        }
+        // map plan to demo amounts
+        const amounts = { Bronze:50, Silver:200, Gold:500 };
+        const investAmount = amounts[plan] || 100;
+        const users = readUsers();
+        const user = users.find(u=>u.email===email);
+        // add investment
+        user.investments = user.investments || [];
+        user.investments.push({ plan, amount:investAmount, progress:0, started:Date.now() });
+        writeUsers(users);
+        alert(`Invested ${currency(investAmount)} in ${plan} plan (demo).`);
+        refreshNav();
+        showDashboard();
+    });
+});
+
+/* deposit / withdraw (demo) */
+depositBtn.addEventListener('click', ()=>{
+    const email = getCurrentEmail(); if(!email){ alert('Login first'); return; }
+    const users = readUsers(); const user = users.find(u=>u.email===email);
+    user.balance = (user.balance || 0) + 100; // add demo 100
+    writeUsers(users); refreshNav(); showDashboard();
+});
+withdrawBtn.addEventListener('click', ()=>{
+    const email = getCurrentEmail(); if(!email){ alert('Login first'); return; }
+    const users = readUsers(); const user = users.find(u=>u.email===email);
+    const w = Math.min( (user.balance || 0), 50 );
+    user.balance = (user.balance || 0) - w;
+    writeUsers(users); refreshNav(); showDashboard();
+});
+
+/* simulate daily ROI: increment progress and add small balance */
+addFakeProfit.addEventListener('click', ()=>{
+    const email = getCurrentEmail(); if(!email){ alert('Login first'); return; }
+    const users = readUsers(); const user = users.find(u=>u.email===email);
+    if(!user.investments || user.investments.length===0){ alert('No investments to simulate.'); return; }
+    user.investments.forEach(inv=>{
+        inv.progress = Math.min((inv.progress||0)+10, 100);
+        // small payout into balance using plan ROI mapping
+        const roiMap = { Bronze:0.05, Silver:0.07, Gold:0.10 };
+        const roi = roiMap[inv.plan] || 0.05;
+        const payout = inv.amount * roi * 0.1; // small chunk
+        user.balance = (user.balance||0) + payout;
+    });
+    writeUsers(users); refreshNav(); showDashboard();
+});
+
+clearInvestments.addEventListener('click', ()=>{
+    const email = getCurrentEmail(); if(!email){ alert('Login first'); return; }
+    const users = readUsers(); const user = users.find(u=>u.email===email);
+    user.investments = [];
+    writeUsers(users); refreshNav(); showDashboard();
+});
+
+/* utility */
+function currency(n){
+    // show as Naira symbol (you can change)
+    const v = Number(n || 0);
+    // return '₦' + v.toLocaleString();
+    // For demo we display with 2 decimals:
+    return '₦' + v.toFixed(2);
+}
+
+/* initial boot */
+refreshNav();
+showPlans();
+
+</script>
+</body>
+</html>
