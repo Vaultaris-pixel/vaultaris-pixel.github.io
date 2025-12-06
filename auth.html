@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaultaris | Login / Register</title>
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin: 80px auto;
+            background: #111;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #222;
+        }
+
+        h2 {
+            text-align: center;
+            color: gold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: gold;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #000;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        a {
+            color: gold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="form">
+        <h2 id="title">Login</h2>
+        <input type="email" placeholder="Email">
+        <input type="password" placeholder="Password">
+        <button onclick="location.href='dashboard.html'">Login</button>
+
+        <p>Don't have an account? 
+            <a href="#" onclick="showRegister()">Register</a>
+        </p>
+    </div>
+
+<script>
+function showRegister() {
+    document.getElementById("form").innerHTML = `
+        <h2 style="color:gold;">Register</h2>
+        <input type="text" placeholder="Full Name">
+        <input type="email" placeholder="Email">
+        <input type="password" placeholder="Password">
+        <button onclick="location.href='dashboard.html'">Create Account</button>
+        <p>Already have an account? 
+            <a href="auth.html">Login</a>
+        </p>
+    `;
+}
+</script>
+
+</body>
+</html>
