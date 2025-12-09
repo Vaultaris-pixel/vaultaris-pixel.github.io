@@ -1,0 +1,49 @@
+-- Users table
+CREATE TABLE users (
+    id VARCHAR(36) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Portfolios table
+CREATE TABLE portfolios (
+    id VARCHAR(36) PRIMARY KEY,
+    user_id VARCHAR(36) REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Holdings table
+CREATE TABLE holdings (
+    id VARCHAR(36) PRIMARY KEY,
+    portfolio_id VARCHAR(36) REFERENCES portfolios(id) ON DELETE CASCADE,
+    symbol VARCHAR(10) NOT NULL,
+    quantity NUMERIC(20,4) NOT NULL,
+    average_price NUMERIC(20,4) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Transactions table
+CREATE TABLE transactions (
+    id VARCHAR(36) PRIMARY KEY,
+    portfolio_id VARCHAR(36) REFERENCES portfolios(id) ON DELETE CASCADE,
+    symbol VARCHAR(10) NOT NULL,
+    type VARCHAR(4) CHECK (type IN ('buy','sell')) NOT NULL,
+    quantity NUMERIC(20,4) NOT NULL,
+    price NUMERIC(20,4) NOT NULL,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Orders table
+CREATE TABLE orders (
+    id VARCHAR(36) PRIMARY KEY,
+    portfolio_id VARCHAR(36) REFERENCES portfolios(id) ON DELETE CASCADE,
+    symbol VARCHAR(10) NOT NULL,
+    type VARCHAR(4) CHECK (type IN ('buy','sell')) NOT NULL,
+    quantity NUMERIC(20,4) NOT NULL,
+    price NUMERIC(20,4) NOT NULL,
+    status VARCHAR(10) CHECK (status IN ('pending','completed','canceled')) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
