@@ -5,6 +5,7 @@ info:
 servers:
   - url: https://api.myinvestment.com
 paths:
+  # Users
   /users:
     post:
       summary: Create a new user
@@ -35,8 +36,173 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
 
+  # Authentication
+  /auth/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        '201':
+          description: User registered successfully
+
+  /auth/login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+
+  # Portfolios
+  /portfolios:
+    post:
+      summary: Create a new portfolio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Portfolio'
+      responses:
+        '201':
+          description: Portfolio created successfully
+
+    get:
+      summary: Get all portfolios for the authenticated user
+      responses:
+        '200':
+          description: List of portfolios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Portfolio'
+
+  /portfolios/{id}:
+    get:
+      summary: Get a specific portfolio
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Portfolio details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+
+  # Holdings
+  /portfolios/{portfolioId}/holdings:
+    get:
+      summary: Get all holdings in a portfolio
+      parameters:
+        - name: portfolioId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of holdings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Holding'
+
+    post:
+      summary: Add a new holding to a portfolio
+      parameters:
+        - name: portfolioId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Holding'
+      responses:
+        '201':
+          description: Holding added successfully
+
+  # Transactions
+  /transactions:
+    post:
+      summary: Create a transaction (buy/sell)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: Transaction created successfully
+
+    get:
+      summary: Get all transactions for the authenticated user
+      responses:
+        '200':
+          description: List of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+
+  # Orders
+  /orders:
+    post:
+      summary: Create a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: Order created successfully
+
+    get:
+      summary: Get all orders for the authenticated user
+      responses:
+        '200':
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
 components:
   schemas:
+    # User schemas
     User:
       type: object
       properties:
@@ -46,3 +212,98 @@ components:
           type: string
         email:
           type: string
+
+    UserRegister:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+
+    UserLogin:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    AuthToken:
+      type: object
+      properties:
+        token:
+          type: string
+
+    # Portfolio schema
+    Portfolio:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        name:
+          type: string
+
+    # Holding schema
+    Holding:
+      type: object
+      properties:
+        id:
+          type: string
+        portfolio_id:
+          type: string
+        symbol:
+          type: string
+        quantity:
+          type: number
+        average_price:
+          type: number
+
+    # Transaction schema
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        portfolio_id:
+          type: string
+        symbol:
+          type: string
+        type:
+          type: string
+          enum: [buy, sell]
+        quantity:
+          type: number
+        price:
+          type: number
+        date:
+          type: string
+          format: date-time
+
+    # Order schema
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        portfolio_id:
+          type: string
+        symbol:
+          type: string
+        type:
+          type: string
+          enum: [buy, sell]
+        quantity:
+          type: number
+        price:
+          type: number
+        status:
+          type: string
+          enum: [pending, completed, canceled]
+        created_at:
+          type: string
+          format: date-time
